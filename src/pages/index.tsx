@@ -9,7 +9,8 @@ import { api } from "../utils/api";
 import { Flex, Text } from "@chakra-ui/react";
 
 const Home: NextPage = () => {
-  const hello = api.example.hello.useQuery({ text: "from tRPC" });
+  const { data, isLoading} = api.example.hello.useQuery({ text: "from tRPC" });
+  console.log(isLoading, data);
 
   return (
     <>
@@ -23,9 +24,9 @@ const Home: NextPage = () => {
           <div>
             <IoReorderThreeOutline />
           </div>
-          <Text fontWeight="thin" fontSize="2xl">
+          <div className="font-thin text-2xl">
             Title Here
-          </Text>
+          </div>
           <div className="flex items-center gap-1 space-x-2">
             <div>
               <AiOutlineBell />
@@ -37,9 +38,9 @@ const Home: NextPage = () => {
         </header>
         <section className="grid grid-cols-12 place-items-center w-full h-full">
           <main className="col-span-8 h-full w-full border-r border-gray-300">
-            Body
+            <AuthShowcase />
           </main>
-          <aside className="col-span-4 w-full h-full">Body 123232</aside>
+          <aside className="col-span-4 w-full h-full">Aside</aside>
         </section>
       </div>
     </>
@@ -48,27 +49,27 @@ const Home: NextPage = () => {
 
 export default Home;
 
-// const AuthShowcase: React.FC = () => {
-//   const { data: sessionData } = useSession();
+const AuthShowcase: React.FC = () => {
+  const { data: sessionData } = useSession();
 
-//   const { data: secretMessage } = api.example.getSecretMessage.useQuery(
-//     undefined, // no input
-//     { enabled: sessionData?.user !== undefined },
-//   );
+  const { data: secretMessage } = api.example.getSecretMessage.useQuery(
+    undefined, // no input
+    { enabled: sessionData?.user !== undefined },
+  );
 
-//   return (
-//     <div className="flex flex-col items-center justify-center gap-4">
-//       <p className="text-center text-2xl text-white">
-//         {sessionData && <span>Logged in as {sessionData.user?.name}</span>}
-//         {secretMessage && <span> - {secretMessage}</span>}
-//       </p>
-//       <Text color="white">Hello World</Text>
-//       <button
-//         className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
-//         onClick={sessionData ? () => void signOut() : () => void signIn()}
-//       >
-//         {sessionData ? "Sign out" : "Sign in"}
-//       </button>
-//     </div>
-//   );
-// };
+  return (
+    <div className="flex flex-col items-center justify-center gap-4">
+      <p className="text-center text-2xl ">
+        {sessionData && <span>Logged in as {sessionData.user?.name}</span>}
+        {secretMessage && <span> - {secretMessage}</span>}
+      </p>
+      <Text color="white">Hello World</Text>
+      <button
+        className="rounded-full bg-white/10 px-10 py-3 font-semibold  no-underline transition hover:bg-white/20"
+        onClick={sessionData ? () => void signOut() : () => void signIn()}
+      >
+        {sessionData ? "Sign out" : "Sign in"}
+      </button>
+    </div>
+  );
+};
