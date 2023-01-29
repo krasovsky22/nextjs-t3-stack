@@ -1,0 +1,11 @@
+{
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "server": "localhost",
+            "driver": "PostgreSQL",
+            "name": "nextjs-t3-stacl",
+            "connectString": "postgresql://postgres:postgres@localhost:5432/db"
+        }
+    ]
+}
