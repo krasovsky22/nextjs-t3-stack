@@ -1,6 +1,6 @@
+import { api } from "@utils/api";
 import { useState } from "react";
 import { Flex, Box, Input, Button, List, ListItem } from "@chakra-ui/react";
-import { api } from "@utils/api";
 
 const Todos = () => {
   const [description, setDescription] = useState("");
@@ -29,6 +29,7 @@ const Todos = () => {
     </Flex>
   );
 };
+
 Todos.requireAuth = true;
 
 export default Todos;
