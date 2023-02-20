@@ -33,11 +33,14 @@ export const todoRouter = createTRPCRouter({
         where: { id: input.id, userId: ctx.session.user.id },
       });
 
-      if (todo) {
-        await ctx.prisma.todo.delete({
-          where: { id: input.id },
-        });
+      if (!todo) {
+        throw new Error("Todo is not found.");
       }
+
+      await ctx.prisma.todo.delete({
+        where: { id: input.id },
+      });
+
 
       return {
         success: true,
