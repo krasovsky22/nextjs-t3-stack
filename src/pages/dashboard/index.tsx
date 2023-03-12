@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+
 const Dashboard = () => {
   return (
     <div>
@@ -9,5 +10,7 @@ const Dashboard = () => {
 };
 
 Dashboard.requireAuth = true;
+Dashboard.title = "Dashboard";
+Dashboard.description = "Dashboard Page Description";
 
 export default Dashboard;

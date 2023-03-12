@@ -1,18 +1,19 @@
+import type { NextPage } from "next";
 import { type AppType } from "next/app";
 import { type Session } from "next-auth";
-import type { NextPage } from "next";
 import { SessionProvider } from "next-auth/react";
-
 import { ChakraProvider } from "@chakra-ui/react";
-import { api } from "../utils/api";
 
 import "../styles/globals.css";
+import { api } from "../utils/api";
 import Layout from "@/components/Layout";
 import SecureLayout from "@/components/SecureLayout";
 import SecureWrapper from "@components/SecureWrapper";
 
-export type NextApplicationPage<P = any, IP = P> = NextPage<P, IP> & {
+export type NextApplicationPage<P = unknown, IP = P> = NextPage<P, IP> & {
   requireAuth?: boolean;
+  title?: string;
+  description?: string;
 };
 
 const MyApp: AppType<{ session: Session | null }> = ({
@@ -24,7 +25,10 @@ const MyApp: AppType<{ session: Session | null }> = ({
       <ChakraProvider>
         {(Component as NextApplicationPage)?.requireAuth ? (
           <SecureWrapper>
-            <SecureLayout>
+            <SecureLayout
+              title={(Component as NextApplicationPage).title ?? ""}
+              description={(Component as NextApplicationPage).description ?? ""}
+            >
               <Component {...pageProps} />
             </SecureLayout>
           </SecureWrapper>
