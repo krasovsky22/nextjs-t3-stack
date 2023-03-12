@@ -1,15 +1,18 @@
-import type { ReactElement } from "react";
-import { IoReorderThreeOutline } from "react-icons/io5";
-import { AiOutlineBell } from "react-icons/ai";
 import Head from "next/head";
-import Link from "next/link";
-import { useRouter } from "next/router";
-import { signIn, signOut, useSession } from "next-auth/react";
+import { Box } from "@chakra-ui/react";
+import type { ReactElement } from "react";
+import { useSession } from "next-auth/react";
 
-import { api } from "../utils/api";
-import { Flex, Text } from "@chakra-ui/react";
+import Loading from "./Loading";
+import { GithubButton, LogoutButton } from "@components/Buttons";
 
 const Layout = ({ children }: { children: ReactElement }) => {
+  const { data: sessionData, status } = useSession();
+
+  if (status === "loading") {
+    return <Loading status="Initializing Session." />;
+  }
+
   return (
     <>
       <Head>
@@ -19,24 +22,15 @@ const Layout = ({ children }: { children: ReactElement }) => {
       </Head>
       <div className="flex h-screen w-full flex-col ">
         <header className="flex h-14 w-full items-center justify-around border-b border-gray-200 text-2xl">
-          <div>
-            <IoReorderThreeOutline />
-          </div>
-          <div className="text-2xl font-thin">Title Here</div>
-          <div className="flex items-center gap-1 space-x-2">
-            <div>
-              <AiOutlineBell />
-            </div>
-            <div>
-              <AiOutlineBell />
-            </div>
-          </div>
+          <div className="flex-grow"></div>
+          <Box mx={5}>
+            {sessionData && <LogoutButton />}
+
+            {!sessionData && <GithubButton />}
+          </Box>
         </header>
-        <section className="grid h-full w-full grid-cols-12 place-items-center">
-          <main className="col-span-8 h-full w-full border-r border-gray-300">
-            {children}
-          </main>
-          <aside className="col-span-4 h-full w-full">Aside</aside>
+        <section className="w-fullplace-items-center h-full">
+          <main className="h-full w-full ">{children}</main>
         </section>
       </div>
     </>

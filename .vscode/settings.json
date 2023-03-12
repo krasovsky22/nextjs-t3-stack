@@ -9,6 +9,9 @@
     }
   ],
   "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll": false
+  },
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "typescript.tsdk": "node_modules/typescript/lib",
   "typescript.enablePromptUseWorkspaceTsdk": true

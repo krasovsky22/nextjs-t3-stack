@@ -7,8 +7,9 @@ import { ChakraProvider } from "@chakra-ui/react";
 import { api } from "../utils/api";
 
 import "../styles/globals.css";
-import Layout from "@components/layout";
-import SecureWrapper from '@components/SecureWrapper';
+import Layout from "@/components/Layout";
+import SecureLayout from "@/components/SecureLayout";
+import SecureWrapper from "@components/SecureWrapper";
 
 export type NextApplicationPage<P = any, IP = P> = NextPage<P, IP> & {
   requireAuth?: boolean;
@@ -23,12 +24,14 @@ const MyApp: AppType<{ session: Session | null }> = ({
       <ChakraProvider>
         {(Component as NextApplicationPage)?.requireAuth ? (
           <SecureWrapper>
-            <Layout>
+            <SecureLayout>
               <Component {...pageProps} />
-            </Layout>
+            </SecureLayout>
           </SecureWrapper>
         ) : (
-          <Component {...pageProps} />
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
         )}
       </ChakraProvider>
     </SessionProvider>
