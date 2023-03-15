@@ -17,10 +17,13 @@ export const serverSchema = z.object({
     // Since NextAuth.js automatically uses the VERCEL_URL if present.
     (str) => process.env.VERCEL_URL ?? str,
     // VERCEL_URL doesn't include `https` so it cant be validated as a URL
-    process.env.VERCEL ? z.string() : z.string().url(),
+    process.env.VERCEL ? z.string() : z.string().url()
   ),
   GITHUB_ID: z.string(),
   GITHUB_SECRET: z.string(),
+  EXERCISE_RAPID_API_KEY: z.string(),
+  EXERCISE_RAPID_API_HOST: z.string(),
+  EXERCISE_RAPID_API_URL: z.string().url(),
 });
 
 /**
@@ -29,12 +32,19 @@ export const serverSchema = z.object({
  * @type {{ [k in keyof z.infer<typeof serverSchema>]: z.infer<typeof serverSchema>[k] | undefined }}
  */
 export const serverEnv = {
-  DATABASE_URL: process.env.DATABASE_URL,
   NODE_ENV: process.env.NODE_ENV,
-  NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
+
+  DATABASE_URL: process.env.DATABASE_URL,
+
   NEXTAUTH_URL: process.env.NEXTAUTH_URL,
+  NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
+
   GITHUB_ID: process.env.GITHUB_ID,
   GITHUB_SECRET: process.env.GITHUB_SECRET,
+
+  EXERCISE_RAPID_API_URL: process.env.EXERCISE_RAPID_API_URL,
+  EXERCISE_RAPID_API_KEY: process.env.EXERCISE_RAPID_API_KEY,
+  EXERCISE_RAPID_API_HOST: process.env.EXERCISE_RAPID_API_HOST,
 };
 
 /**

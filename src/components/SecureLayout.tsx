@@ -27,10 +27,10 @@ const SecureLayout = ({
           </div>
         </header>
         <section className="grid h-full w-full grid-cols-12 place-items-center gap-5">
-          <aside className="col-span-1 h-full w-full">
+          <aside className="col-span-2 h-full w-full">
             <SecureSidebar />
           </aside>
-          <main className="col-span-11 h-full w-full border-r border-gray-300">
+          <main className="col-span-10 h-full w-full border-r border-gray-300">
             {children}
           </main>
         </section>
