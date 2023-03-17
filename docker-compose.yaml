@@ -1,16 +1,19 @@
-version: '3.8'
+version: "3.8"
 services:
   db:
-    image: postgres:15.1-alpine
+    image: bitnami/mongodb:latest
     restart: always
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=db
+      MONGO_INITDB_DATABASE: db
+      MONGODB_REPLICA_SET_MODE: primary
+      MONGODB_REPLICA_SET_KEY: replicasetkey123
+      
+      MONGODB_ROOT_USER: root
+      MONGODB_ROOT_PASSWORD: rootpassword
     ports:
-      - '5432:5432'
-    volumes: 
-      - db:/var/lib/postgresql/data
+      - 27017:27017
+    volumes:
+      - mongodb_data_container:/data/db
 volumes:
-  db:
+  mongodb_data_container:
     driver: local

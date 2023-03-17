@@ -21,6 +21,7 @@ export const serverSchema = z.object({
   ),
   GITHUB_ID: z.string(),
   GITHUB_SECRET: z.string(),
+  
   EXERCISE_RAPID_API_KEY: z.string(),
   EXERCISE_RAPID_API_HOST: z.string(),
   EXERCISE_RAPID_API_URL: z.string().url(),
