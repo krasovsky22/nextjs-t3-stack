@@ -1,10 +1,10 @@
 require("dotenv").config();
 const fetch = require("node-fetch");
+const querystring = require("node:querystring");
 const { PrismaClient } = require("@prisma/client");
+const { PromisePool } = require("@supercharge/promise-pool");
 
 const prisma = new PrismaClient();
-
-const URL = "https://exerciseapi3.p.rapidapi.com/search/muscles/";
 
 const options = {
   method: "GET",
@@ -16,27 +16,73 @@ const options = {
 
 const fetchMuscleGroups = async () => {
   console.log("Fetching muscle groups.");
-  const response = await fetch(URL, options);
+  const response = await fetch(
+    "https://exerciseapi3.p.rapidapi.com/search/muscles/",
+    options
+  );
   const data = await response.json();
 
   return data;
 };
 
+const fetchExerciseByMuscleType = async (queryObj) => {
+  console.log(`Fetching exercises for ${JSON.stringify(queryObj)}.`);
+
+  const url =
+    "https://exerciseapi3.p.rapidapi.com/search/?" +
+    querystring.stringify({ ...queryObj });
+
+  const response = await fetch(url, options);
+  return response.json();
+};
+
 const load = async () => {
   try {
-    console.log(process.env.EXERCISE_RAPID_API_URL);
     console.log("Pruning Muscle Groups.");
     await prisma.muscleGroup.deleteMany();
+    console.log("Pruning Exercises.");
+    await prisma.exercise.deleteMany();
 
     const muscleGroups = await fetchMuscleGroups();
-    console.log(
-      `Inserting ${muscleGroups.length} muscle groups into database.`
-    );
-    await prisma.muscleGroup.createMany({
-      data: muscleGroups.map((groupName) => ({
-        name: groupName,
-      })),
-    });
+    await PromisePool.for(muscleGroups)
+      .withConcurrency(5)
+      .process(async (muscleGroup) => {
+        const primaryMuscleGroupExcercises = await fetchExerciseByMuscleType({
+          primaryMuscle: muscleGroup,
+        });
+        const secondaryMuscleGroupExcersices = await fetchExerciseByMuscleType({
+          secondaryMuscle: muscleGroup,
+        });
+
+        console.log(`Inserting ${muscleGroup} muscle group into database.`);
+        await prisma.muscleGroup.create({
+          data: {
+            name: muscleGroup,
+            primaryMuscleExercises: {
+              create: primaryMuscleGroupExcercises.map((excercise) => {
+                return {
+                  type: excercise.Type,
+                  name: excercise.Name,
+                  force: excercise.Force,
+                  youtubeLink: excercise["Youtube link"],
+                  workoutTypes: excercise["Workout Type"],
+                };
+              }),
+            },
+            secondaryMuscleExercises: {
+              create: secondaryMuscleGroupExcersices.map((excercise) => {
+                return {
+                  type: excercise.Type,
+                  name: excercise.Name,
+                  force: excercise.Force,
+                  youtubeLink: excercise["Youtube link"],
+                  workoutTypes: excercise["Workout Type"],
+                };
+              }),
+            },
+          },
+        });
+      });
   } catch (e) {
     console.error(e);
   } finally {

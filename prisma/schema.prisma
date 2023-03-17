@@ -84,8 +84,31 @@ model Todo {
 }
 
 model MuscleGroup {
-    id   String @id @default(auto()) @map("_id") @db.ObjectId
-    name String
+    id                       String     @id @default(auto()) @map("_id") @db.ObjectId
+    name                     String     @unique
+    createdAt                DateTime   @default(now())
+    primaryMuscleExerciseIds String[]   @db.ObjectId
+    primaryMuscleExercises   Exercise[] @relation(name: "primary", fields: [primaryMuscleExerciseIds], references: [id])
+
+    secondaryMuscleExerciseIds String[]   @db.ObjectId
+    secondaryMuscleExercises   Exercise[] @relation(name: "secondary", fields: [secondaryMuscleExerciseIds], references: [id])
 
     @@map("muscle_groups")
+}
+
+model Exercise {
+    id                    String        @id @default(auto()) @map("_id") @db.ObjectId
+    name                  String        @unique
+    type                  String
+    workoutTypes          String[]
+    force                 String
+    youtubeLink           String
+    createdAt             DateTime      @default(now())
+    primaryMuscleGroupIds String[]      @db.ObjectId
+    primaryMuscles        MuscleGroup[] @relation(name: "primary", fields: [primaryMuscleGroupIds], references: [id])
+
+    secondaryMuscleGroupIds String[]      @db.ObjectId
+    secondaryMuscles        MuscleGroup[] @relation(name: "secondary", fields: [secondaryMuscleGroupIds], references: [id])
+
+    @@map("exercies")
 }
