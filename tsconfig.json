@@ -4,7 +4,7 @@
     "paths": {
       "@/*": ["src/*"],
       "@utils/*": ["src/utils/*"],
-      "@components/*": ["src/components/*"],
+      "@components/*": ["src/components/*"]
     },
     "target": "es2017",
     "lib": ["dom", "dom.iterable", "esnext"],
@@ -35,5 +35,5 @@
     "**/*.mjs",
     ".next/types/**/*.ts"
   ],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "prisma/seed.js"]
 }
