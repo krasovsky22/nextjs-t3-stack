@@ -21,10 +21,6 @@ export const serverSchema = z.object({
   ),
   GITHUB_ID: z.string(),
   GITHUB_SECRET: z.string(),
-  
-  EXERCISE_RAPID_API_KEY: z.string(),
-  EXERCISE_RAPID_API_HOST: z.string(),
-  EXERCISE_RAPID_API_URL: z.string().url(),
 });
 
 /**
@@ -42,10 +38,6 @@ export const serverEnv = {
 
   GITHUB_ID: process.env.GITHUB_ID,
   GITHUB_SECRET: process.env.GITHUB_SECRET,
-
-  EXERCISE_RAPID_API_URL: process.env.EXERCISE_RAPID_API_URL,
-  EXERCISE_RAPID_API_KEY: process.env.EXERCISE_RAPID_API_KEY,
-  EXERCISE_RAPID_API_HOST: process.env.EXERCISE_RAPID_API_HOST,
 };
 
 /**
