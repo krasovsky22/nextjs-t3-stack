@@ -45,7 +45,7 @@ const load = async () => {
 
     const muscleGroups = await fetchMuscleGroups();
     await PromisePool.for(muscleGroups)
-      .withConcurrency(5)
+      .withConcurrency(1)
       .process(async (muscleGroup) => {
         const primaryMuscleGroupExcercises = await fetchExerciseByMuscleType({
           primaryMuscle: muscleGroup,
@@ -55,33 +55,37 @@ const load = async () => {
         });
 
         console.log(`Inserting ${muscleGroup} muscle group into database.`);
-        await prisma.muscleGroup.create({
-          data: {
-            name: muscleGroup,
-            primaryMuscleExercises: {
-              create: primaryMuscleGroupExcercises.map((excercise) => {
-                return {
-                  type: excercise.Type,
-                  name: excercise.Name,
-                  force: excercise.Force,
-                  youtubeLink: excercise["Youtube link"],
-                  workoutTypes: excercise["Workout Type"],
-                };
-              }),
+        try {
+          await prisma.muscleGroup.create({
+            data: {
+              name: muscleGroup,
+              primaryMuscleExercises: {
+                create: primaryMuscleGroupExcercises.map((excercise) => {
+                  return {
+                    type: excercise.Type,
+                    name: excercise.Name,
+                    force: excercise.Force,
+                    youtubeLink: excercise["Youtube link"],
+                    workoutTypes: excercise["Workout Type"],
+                  };
+                }),
+              },
+              secondaryMuscleExercises: {
+                create: secondaryMuscleGroupExcersices.map((excercise) => {
+                  return {
+                    type: excercise.Type,
+                    name: excercise.Name,
+                    force: excercise.Force,
+                    youtubeLink: excercise["Youtube link"],
+                    workoutTypes: excercise["Workout Type"],
+                  };
+                }),
+              },
             },
-            secondaryMuscleExercises: {
-              create: secondaryMuscleGroupExcersices.map((excercise) => {
-                return {
-                  type: excercise.Type,
-                  name: excercise.Name,
-                  force: excercise.Force,
-                  youtubeLink: excercise["Youtube link"],
-                  workoutTypes: excercise["Workout Type"],
-                };
-              }),
-            },
-          },
-        });
+          });
+        } catch {
+          console.error("ERROR", e);
+        }
       });
   } catch (e) {
     console.error(e);

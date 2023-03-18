@@ -3,8 +3,8 @@ import { Box } from "@chakra-ui/react";
 import type { ReactElement } from "react";
 import { useSession } from "next-auth/react";
 
-import Loading from "./Loading";
-import { GithubButton, LogoutButton } from "@components/Buttons";
+import Loading from "./loading";
+import { GithubButton, LogoutButton } from "@/components/buttons";
 
 const Layout = ({ children }: { children: ReactElement }) => {
   const { data: sessionData, status } = useSession();
