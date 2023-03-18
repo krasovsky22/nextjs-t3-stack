@@ -44,48 +44,65 @@ const load = async () => {
     await prisma.exercise.deleteMany();
 
     const muscleGroups = await fetchMuscleGroups();
-    await PromisePool.for(muscleGroups)
+
+    // store muscle groups.
+    await prisma.muscleGroup.createMany({
+      data: muscleGroups.map((muscleGroup) => ({
+        name: muscleGroup,
+      })),
+    });
+
+    const storedMuscleGroups = await prisma.muscleGroup.findMany();
+    await PromisePool.for(storedMuscleGroups)
       .withConcurrency(1)
-      .process(async (muscleGroup) => {
+      .process(async ({ name }) => {
         const primaryMuscleGroupExcercises = await fetchExerciseByMuscleType({
-          primaryMuscle: muscleGroup,
+          primaryMuscle: name,
         });
         const secondaryMuscleGroupExcersices = await fetchExerciseByMuscleType({
-          secondaryMuscle: muscleGroup,
+          secondaryMuscle: name,
         });
 
-        console.log(`Inserting ${muscleGroup} muscle group into database.`);
-        try {
-          await prisma.muscleGroup.create({
-            data: {
-              name: muscleGroup,
-              primaryMuscleExercises: {
-                create: primaryMuscleGroupExcercises.map((excercise) => {
-                  return {
-                    type: excercise.Type,
-                    name: excercise.Name,
-                    force: excercise.Force,
-                    youtubeLink: excercise["Youtube link"],
-                    workoutTypes: excercise["Workout Type"],
-                  };
-                }),
+        await PromisePool.for([
+          ...primaryMuscleGroupExcercises,
+          ...secondaryMuscleGroupExcersices,
+        ])
+          .withConcurrency(1)
+          .process(async (apiExcercise) => {
+            const storedExercise = await prisma.exercise.findUnique({
+              where: {
+                name: apiExcercise.Name,
               },
-              secondaryMuscleExercises: {
-                create: secondaryMuscleGroupExcersices.map((excercise) => {
-                  return {
-                    type: excercise.Type,
-                    name: excercise.Name,
-                    force: excercise.Force,
-                    youtubeLink: excercise["Youtube link"],
-                    workoutTypes: excercise["Workout Type"],
-                  };
-                }),
+            });
+
+            if (storedExercise) {
+              return;
+            }
+
+            // not stored, create new
+            const primaryMuscles = apiExcercise["Primary Muscles"];
+            const secondaryMuscles = apiExcercise["SecondaryMuscles"];
+
+            await prisma.exercise.create({
+              data: {
+                type: apiExcercise.Type,
+                name: apiExcercise.Name,
+                force: apiExcercise.Force,
+                youtubeLink: apiExcercise["Youtube link"],
+                workoutTypes: apiExcercise["Workout Type"],
+                primaryMuscleGroupIds: storedMuscleGroups
+                  .filter((storedMuscleGroup) =>
+                    primaryMuscles.includes(storedMuscleGroup.name)
+                  )
+                  .map((group) => group.id),
+                secondaryMuscleGroupIds: storedMuscleGroups
+                  .filter((storedMuscleGroup) =>
+                    secondaryMuscles.includes(storedMuscleGroup.name)
+                  )
+                  .map((group) => group.id),
               },
-            },
+            });
           });
-        } catch {
-          console.error("ERROR", e);
-        }
       });
   } catch (e) {
     console.error(e);
