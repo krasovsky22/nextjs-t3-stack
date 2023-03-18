@@ -4,7 +4,7 @@ import type { ReactElement } from "react";
 import { useSession } from "next-auth/react";
 
 import Loading from "./loading";
-import { GithubButton, LogoutButton } from "@/components/buttons";
+import { GithubButton, LogoutButton } from "@components/buttons";
 
 const Layout = ({ children }: { children: ReactElement }) => {
   const { data: sessionData, status } = useSession();

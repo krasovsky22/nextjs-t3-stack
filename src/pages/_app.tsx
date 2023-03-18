@@ -5,10 +5,10 @@ import { SessionProvider } from "next-auth/react";
 import { ChakraProvider } from "@chakra-ui/react";
 
 import "../styles/globals.css";
-import { api } from "../utils/api";
-import Layout from "@/components/layout";
-import SecureLayout from "@/components/secureLayout";
-import SecureWrapper from "@/components/secureWrapper";
+import { api } from "@utils/api";
+import Layout from "@components/layout";
+import SecureLayout from "@components/secureLayout";
+import SecureWrapper from "@components/secureWrapper";
 
 export type NextApplicationPage<P = unknown, IP = P> = NextPage<P, IP> & {
   requireAuth?: boolean;
