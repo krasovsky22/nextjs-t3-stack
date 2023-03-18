@@ -1,12 +1,4 @@
-import {
-  Text,
-  VStack,
-  Icon,
-  StackDivider,
-  Box,
-  Container,
-  Flex,
-} from "@chakra-ui/react";
+import { Text, Icon, Flex, Container } from "@chakra-ui/react";
 import { TbBarbell } from "react-icons/tb";
 import { GiBiceps } from "react-icons/gi";
 import { type IconType } from "react-icons";

@@ -1,4 +1,4 @@
-import { Button, Stack } from "@chakra-ui/react";
+import { Button } from "@chakra-ui/react";
 import { signIn } from "next-auth/react";
 import { BsGithub } from "react-icons/bs";
 
