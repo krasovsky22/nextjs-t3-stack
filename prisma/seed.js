@@ -83,25 +83,34 @@ const load = async () => {
             const primaryMuscles = apiExcercise["Primary Muscles"];
             const secondaryMuscles = apiExcercise["SecondaryMuscles"];
 
-            await prisma.exercise.create({
-              data: {
-                type: apiExcercise.Type,
-                name: apiExcercise.Name,
-                force: apiExcercise.Force,
-                youtubeLink: apiExcercise["Youtube link"],
-                workoutTypes: apiExcercise["Workout Type"],
-                primaryMuscleGroupIds: storedMuscleGroups
-                  .filter((storedMuscleGroup) =>
-                    primaryMuscles.includes(storedMuscleGroup.name)
-                  )
-                  .map((group) => group.id),
-                secondaryMuscleGroupIds: storedMuscleGroups
-                  .filter((storedMuscleGroup) =>
-                    secondaryMuscles.includes(storedMuscleGroup.name)
-                  )
-                  .map((group) => group.id),
-              },
-            });
+            try {
+              await prisma.exercise.create({
+                data: {
+                  type: apiExcercise.Type,
+                  name: apiExcercise.Name,
+                  force: apiExcercise.Force,
+                  youtubeLink: apiExcercise["Youtube link"],
+                  workoutTypes: apiExcercise["Workout Type"],
+                  primaryMuscles: {
+                    connect: storedMuscleGroups
+                      .filter((storedMuscleGroup) =>
+                        primaryMuscles.includes(storedMuscleGroup.name)
+                      )
+                      .map((muscle) => ({ id: muscle.id })),
+                  },
+                  secondaryMuscles: {
+                    connect: storedMuscleGroups
+                      .filter((storedMuscleGroup) =>
+                        secondaryMuscles.includes(storedMuscleGroup.name)
+                      )
+                      .map((muscle) => ({ id: muscle.id })),
+                  },
+                },
+              });
+            } catch (e) {
+              console.log("e", e);
+            }
+           
           });
       });
   } catch (e) {
