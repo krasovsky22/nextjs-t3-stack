@@ -1,10 +1,14 @@
 import { type NextPage } from "next";
 import Link from "next/link";
+import { api } from "@utils/api";
 
 import { Flex, Text, Box } from "@chakra-ui/react";
 import HumanBody from "@components/human-body";
+import { chunk } from "lodash";
 
 const Home: NextPage = () => {
+
+
   return (
     <Flex height="100%">
       <Flex flexDir="column">
@@ -13,10 +17,8 @@ const Home: NextPage = () => {
         <Link href="/dashboard">Dashboard</Link>
       </Flex>
       <Flex flexGrow="1" gap="1" alignItems="center" justifyContent="center">
-        <Box flex="1"></Box>
         <HumanBody />
-        <HumanBody />
-        <Box flex="1"></Box>
+        <HumanBody isBack />
       </Flex>
     </Flex>
   );

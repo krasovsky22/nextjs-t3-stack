@@ -1,7 +1,7 @@
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { createTRPCRouter, publicProcedure } from "../trpc";
 
 export const muscleGroupsRouter = createTRPCRouter({
-  findAll: protectedProcedure.query(({ ctx }) => {
+  findAll: publicProcedure.query(({ ctx }) => {
     return ctx.prisma.muscleGroup.findMany();
   }),
 });
