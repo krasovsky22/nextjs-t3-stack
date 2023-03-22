@@ -10,16 +10,9 @@ const Home: NextPage = () => {
 
 
   return (
-    <Flex height="100%">
-      <Flex flexDir="column">
-        <Text>Home Page</Text>
-        <Link href="/todos">Todos</Link>
-        <Link href="/dashboard">Dashboard</Link>
-      </Flex>
-      <Flex flexGrow="1" gap="1" alignItems="center" justifyContent="center">
-        <HumanBody />
-        <HumanBody isBack />
-      </Flex>
+    <Flex gap="10" alignItems="center" justifyContent="center" height="100%">
+      <HumanBody />
+      <HumanBody isBack />
     </Flex>
   );
 };

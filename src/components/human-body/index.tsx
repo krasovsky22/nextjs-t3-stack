@@ -1,4 +1,12 @@
-import { Box, Tooltip, Text, LinkOverlay, LinkBox } from "@chakra-ui/react";
+import { capitalize } from "lodash";
+import {
+  Box,
+  Tooltip,
+  Text,
+  LinkOverlay,
+  LinkBox,
+  Flex,
+} from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
 
 import BackBody from "./back";
@@ -64,7 +72,6 @@ const HumanBody = ({ isBack = false }: { isBack?: boolean }) => {
       }
     };
 
-    console.log("adding event listener");
     element?.addEventListener("mouseover", onMouseOver);
     element?.addEventListener("mouseout", onMouseLeave);
 
@@ -76,7 +83,15 @@ const HumanBody = ({ isBack = false }: { isBack?: boolean }) => {
   return (
     <>
       {!isBack && (
-        <Box flex="1" textAlign="end">
+        <Flex
+          paddingY="20px"
+          height="100%"
+          flexDir="column"
+          flex="1"
+          justifyItems="baseline"
+          alignItems="flex-end"
+          justifyContent="space-evenly"
+        >
           {allMuscleGroups.map((muscle) => (
             <LinkBox key={muscle}>
               <LinkOverlay
@@ -85,17 +100,18 @@ const HumanBody = ({ isBack = false }: { isBack?: boolean }) => {
                 onMouseLeave={() => setTooltip(null)}
               >
                 <Text
-                  color={tooltip === muscle ? "inherit" : "gray.300"}
+                  fontSize="large"
+                  color={tooltip === muscle ? "inherit" : "blackAlpha.500"}
                   fontWeight={tooltip === muscle ? "bold" : "normal"}
                 >
-                  {muscle}
+                  {capitalize(muscle)}
                 </Text>
               </LinkOverlay>
             </LinkBox>
           ))}
-        </Box>
+        </Flex>
       )}
-      <Tooltip isOpen label={tooltip} placement="top">
+      <Tooltip isOpen label={capitalize(tooltip)} placement="top">
         <Box flex="1" position="relative" ref={ref} h="80%">
           <Box h="100%" position="relative">
             {isBack ? (
@@ -107,7 +123,15 @@ const HumanBody = ({ isBack = false }: { isBack?: boolean }) => {
         </Box>
       </Tooltip>
       {isBack && (
-        <Box flex="1" textAlign="start">
+        <Flex
+          paddingY="20px"
+          height="100%"
+          flexDir="column"
+          flex="1"
+          justifyItems="baseline"
+          alignItems="flex-start"
+          justifyContent="space-evenly"
+        >
           {allMuscleGroups.map((muscle) => (
             <LinkBox key={muscle}>
               <LinkOverlay
@@ -116,15 +140,16 @@ const HumanBody = ({ isBack = false }: { isBack?: boolean }) => {
                 onMouseLeave={() => setTooltip(null)}
               >
                 <Text
-                  color={tooltip === muscle ? "inherit" : "gray.300"}
+                  fontSize="large"
+                  color={tooltip === muscle ? "inherit" : "blackAlpha.500"}
                   fontWeight={tooltip === muscle ? "bold" : "normal"}
                 >
-                  {muscle}
+                  {capitalize(muscle)}
                 </Text>
               </LinkOverlay>
             </LinkBox>
           ))}
-        </Box>
+        </Flex>
       )}
     </>
   );
