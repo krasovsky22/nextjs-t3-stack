@@ -111,7 +111,7 @@ const HumanBody = ({ isBack = false }: { isBack?: boolean }) => {
           ))}
         </Flex>
       )}
-      <Tooltip isOpen label={capitalize(tooltip)} placement="top">
+      <Tooltip isOpen label={capitalize(tooltip ?? "")} placement="top">
         <Box flex="1" position="relative" ref={ref} h="80%">
           <Box h="100%" position="relative">
             {isBack ? (
