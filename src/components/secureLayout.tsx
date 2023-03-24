@@ -1,7 +1,7 @@
 import type { ReactElement } from "react";
 import Head from "next/head";
 import { LogoutButton } from "./buttons";
-import SecureSidebar from "./secureSidebar";
+import SecureSidebar from "./secure-sidebar";
 
 const SecureLayout = ({
   title,
