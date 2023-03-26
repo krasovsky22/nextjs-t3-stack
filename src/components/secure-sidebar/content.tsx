@@ -59,9 +59,7 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
       </Flex>
       {sidebarRoutes.map((link) => (
         <Link href={link.url} key={link.url}>
-          <NavItem key={link.name} icon={link.icon}>
-            {link.name}
-          </NavItem>
+          <NavItem icon={link.icon}>{link.name}</NavItem>
         </Link>
       ))}
     </Box>

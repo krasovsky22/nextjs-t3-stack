@@ -1,10 +1,12 @@
 import Head from "next/head";
-import { Box } from "@chakra-ui/react";
+import { Box, IconButton } from "@chakra-ui/react";
 import type { ReactElement } from "react";
+import { AiFillHome } from "react-icons/ai";
 import { useSession } from "next-auth/react";
 
 import Loading from "./loading";
 import { GithubButton, LogoutButton } from "@components/buttons";
+import Link from "next/link";
 
 const Layout = ({ children }: { children: ReactElement }) => {
   const { data: sessionData, status } = useSession();
@@ -21,8 +23,21 @@ const Layout = ({ children }: { children: ReactElement }) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className="flex h-screen w-full flex-col ">
-        <header className="flex h-14 w-full items-center justify-around border-b border-gray-200 text-2xl">
-          <div className="flex-grow"></div>
+        <header className="flex h-14 w-full items-center justify-around border-b border-gray-200 p-2 text-2xl">
+          <Box flexGrow="1" mx={5}>
+            {sessionData && (
+              <Link href="/dashboard">
+                <IconButton
+                  size="sm"
+                  icon={<AiFillHome />}
+                  aria-label="Dasboard"
+                  colorScheme="teal"
+                >
+                  Dashboard
+                </IconButton>
+              </Link>
+            )}
+          </Box>
           <Box mx={5}>
             {sessionData && <LogoutButton />}
 
