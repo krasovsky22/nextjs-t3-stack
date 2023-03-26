@@ -20,7 +20,7 @@ const SecureLayout = ({
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className="flex h-screen w-full flex-col">
-        <header className="grid h-14 w-full grid-cols-12 items-center justify-around border-b border-gray-200 text-2xl">
+        <header className="grid h-14 w-full grid-cols-12 items-center justify-around border-b border-gray-200 px-5 text-2xl">
           <div className="col-span-11"></div>
           <div className="col-span-1 flex flex-row-reverse">
             <LogoutButton />
@@ -30,7 +30,7 @@ const SecureLayout = ({
           <aside className="col-span-2 h-full w-full">
             <SecureSidebar />
           </aside>
-          <main className="col-span-10 h-full w-full border-r border-gray-300">
+          <main className="col-span-10 h-full w-full border-r border-gray-300 p-3">
             {children}
           </main>
         </section>
