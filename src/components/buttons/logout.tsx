@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Image,
   Button,
@@ -6,11 +8,15 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@chakra-ui/react";
-import { signOut, useSession } from "next-auth/react";
+import { type Session } from "next-auth";
+import { signOut } from "next-auth/react";
+import withChakra from "@components/withChakra";
 
-const LogoutButton = () => {
-  const { data: sessionData } = useSession();
+interface LogoutButtonProps {
+  session: Session | null;
+}
 
+const LogoutButton: React.FC<LogoutButtonProps> = withChakra(({ session }) => {
   return (
     <Popover placement="bottom-start">
       <PopoverTrigger>
@@ -19,8 +25,8 @@ const LogoutButton = () => {
           icon={
             <Image
               width={10}
-              src={sessionData?.user?.image ?? ""}
-              alt={sessionData?.user?.name ?? ""}
+              src={session?.user?.image ?? ""}
+              alt={session?.user?.name ?? ""}
               fallbackSrc="https://via.placeholder.com/150"
             />
           }
@@ -36,6 +42,6 @@ const LogoutButton = () => {
       </PopoverContent>
     </Popover>
   );
-};
+});
 
 export default LogoutButton;

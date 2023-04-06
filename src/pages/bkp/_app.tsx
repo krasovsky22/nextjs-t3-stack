@@ -6,7 +6,7 @@ import { ChakraProvider } from "@chakra-ui/react";
 
 import "../styles/globals.css";
 import { api } from "@utils/api";
-import Layout from "@components/layout";
+import Layout from "@/components/layout.bkp";
 import SecureLayout from "@components/secureLayout";
 import SecureWrapper from "@components/secureWrapper";
 
