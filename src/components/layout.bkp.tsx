@@ -39,7 +39,7 @@ const Layout = ({ children }: { children: ReactElement }) => {
             )}
           </Box>
           <Box mx={5}>
-            {sessionData && <LogoutButton />}
+            {sessionData && <LogoutButton session={null} />}
 
             {!sessionData && <GithubButton />}
           </Box>

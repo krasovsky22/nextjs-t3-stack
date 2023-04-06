@@ -23,7 +23,7 @@ const SecureLayout = ({
         <header className="grid h-14 w-full grid-cols-12 items-center justify-around border-b border-gray-200 px-5 text-2xl">
           <div className="col-span-11"></div>
           <div className="col-span-1 flex flex-row-reverse">
-            <LogoutButton />
+            <LogoutButton session={null} />
           </div>
         </header>
         <section className="grid h-full w-full grid-cols-12 place-items-center gap-5">
