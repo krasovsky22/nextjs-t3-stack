@@ -16,7 +16,7 @@ interface LogoutButtonProps {
   session: Session | null;
 }
 
-const LogoutButton: React.FC<LogoutButtonProps> = withChakra(({ session }) => {
+const LogoutButton: React.FC<LogoutButtonProps> = ({ session }) => {
   return (
     <Popover placement="bottom-start">
       <PopoverTrigger>
@@ -42,6 +42,6 @@ const LogoutButton: React.FC<LogoutButtonProps> = withChakra(({ session }) => {
       </PopoverContent>
     </Popover>
   );
-});
+};
 
-export default LogoutButton;
+export default withChakra(LogoutButton);
