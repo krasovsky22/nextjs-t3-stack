@@ -35,7 +35,13 @@ const sidebarRoutes: RouteType[] = [
   {
     icon: GiBiceps,
     name: "Muscle Groups",
-    url: "/dashboard/exercise/muscle-groups",
+    url: "/dashboard/muscle-groups",
+  },
+
+  {
+    icon: GiBiceps,
+    name: "Todo",
+    url: "/dashboard/godo",
   },
 ];
 

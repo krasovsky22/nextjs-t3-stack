@@ -1,4 +1,7 @@
+"use client";
+
 import { Container, Spinner } from "@chakra-ui/react";
+import withChakra from "@utils/withChakra";
 
 type LoadingProps = {
   status?: string;
@@ -19,4 +22,4 @@ const Loading = ({ status = "Loading..." }: LoadingProps) => {
   );
 };
 
-export default Loading;
+export default withChakra(Loading);

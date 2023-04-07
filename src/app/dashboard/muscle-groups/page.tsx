@@ -1,7 +1,10 @@
+"use client";
+
 import { api } from "@utils/api";
+import withChakra from "@utils/withChakra";
 import { Box, Container, Flex, Heading, Text } from "@chakra-ui/react";
 
-const MuscleGroups = () => {
+const MuscleGroupsPage = () => {
   const { data: muscleGroups } = api.muscleGroups.findAll.useQuery();
   console.log("here", muscleGroups);
   return (
@@ -18,6 +21,4 @@ const MuscleGroups = () => {
   );
 };
 
-export default MuscleGroups;
-
-MuscleGroups.requireAuth = true;
+export default withChakra(api.withTRPC(MuscleGroupsPage));

@@ -1,24 +1,30 @@
-import { useCallback, useMemo, useState } from "react";
-import { api } from "@utils/api";
-import { Box, Flex, Heading, Text, Tag, TagLabel } from "@chakra-ui/react";
+"use client";
+
 import Select from "react-select";
+import { capitalize, sortBy } from "lodash";
+import { useCallback, useMemo, useState } from "react";
+import { Box, Flex, Heading, Text } from "@chakra-ui/react";
 import {
   type Options,
   type SingleValue,
 } from "react-select/dist/declarations/src/types";
-import { capitalize, sortBy } from "lodash";
+
+import { api } from "@utils/api";
+import withChakra from "@utils/withChakra";
 
 type OptionType = {
   value: string;
   label: string;
 };
 
-const Exercise = () => {
+const ExercisePage = () => {
   const [selectedMuscleGroup, setSelectedMuscleGroup] = useState<string | null>(
     null
   );
   const { data: muscleGroups } =
     api.muscleGroups.findAllWithExcercies.useQuery();
+
+  console.log(muscleGroups);
 
   const options: Options<OptionType> = useMemo(() => {
     return sortBy(muscleGroups ?? [], "name")?.map((muscleGroup) => {
@@ -39,11 +45,11 @@ const Exercise = () => {
   );
 
   return (
-    <Flex as={Box} flexDir="column" gap={3}>
-      <Box>
-        <Heading>Exercise Page</Heading>
-      </Box>
-      <Flex as={Box} gap={1}>
+    <div className="flex flex-col gap-3">
+      <div>
+        <h4>Exercise Page</h4>
+      </div>
+      <div className="flex gap-1">
         <Flex flex={1} flexDir="column" gap={3}>
           <Select options={options} onChange={onDropdownChange} />
 
@@ -70,12 +76,10 @@ const Exercise = () => {
           )}
         </Flex>
 
-        <Box flex={1}></Box>
-      </Flex>
-    </Flex>
+        <div className="flex-1" />
+      </div>
+    </div>
   );
 };
 
-Exercise.requireAuth = true;
-
-export default Exercise;
+export default withChakra(api.withTRPC(ExercisePage));

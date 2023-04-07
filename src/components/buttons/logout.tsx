@@ -10,7 +10,7 @@ import {
 } from "@chakra-ui/react";
 import { type Session } from "next-auth";
 import { signOut } from "next-auth/react";
-import withChakra from "@components/withChakra";
+import withChakra from "@utils/withChakra";
 
 interface LogoutButtonProps {
   session: Session | null;

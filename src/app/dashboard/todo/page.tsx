@@ -1,4 +1,8 @@
+"use client";
+
 import { api } from "@utils/api";
+import withChakra from "@utils/withChakra";
+
 import { useState } from "react";
 import {
   Flex,
@@ -11,7 +15,7 @@ import {
   Checkbox,
 } from "@chakra-ui/react";
 
-const Todos = () => {
+const TodoPage = () => {
   const [description, setDescription] = useState("");
   const { data: todoItems, refetch } = api.todo.findAll.useQuery();
   const addTodoMutation = api.todo.addTodo.useMutation({
@@ -63,6 +67,4 @@ const Todos = () => {
   );
 };
 
-Todos.requireAuth = true;
-
-export default Todos;
+export default withChakra(api.withTRPC(TodoPage));

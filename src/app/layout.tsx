@@ -23,7 +23,7 @@ export default function RootLayout({
       <body className={font.className}>
         {/* @ts-expect-error Server Component */}
         <Navbar />
-        <main>{children}</main>
+        <main className="px-5 pt-14">{children}</main>
       </body>
     </html>
   );

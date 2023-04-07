@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Flex, Button, Spinner } from "@chakra-ui/react";
 import { signIn } from "next-auth/react";
 import { BsGithub } from "react-icons/bs";
+import withChakra from "@utils/withChakra";
 const GithubButton = () => {
   const [isLoading, setIsLoading] = useState(false);
 
@@ -28,4 +29,4 @@ const GithubButton = () => {
   );
 };
 
-export default GithubButton;
+export default withChakra(GithubButton);
