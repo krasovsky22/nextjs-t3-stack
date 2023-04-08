@@ -5,8 +5,8 @@ import "./globals.css";
 import { Navbar } from "@/components/navbar";
 
 export const metadata = {
-  title: "Create Mext App",
-  description: "Test Description",
+  title: "Gym Tracker   ",
+  description: "Gym App",
 };
 
 const font = Nunito({

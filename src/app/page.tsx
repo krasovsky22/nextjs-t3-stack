@@ -1,10 +1,5 @@
-import HumanBody from "@/components/human-body";
+import HumanBody from "@/components/humanBody";
 import React from "react";
-
-export const metadata = {
-  title: "Create Mext App",
-  description: "Test Description",
-};
 
 export default function Home() {
   return (

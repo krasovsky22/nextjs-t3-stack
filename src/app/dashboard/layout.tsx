@@ -1,6 +1,6 @@
 import getSession from "@utils/getSession";
 import { redirect } from "next/navigation";
-import { SecureSidebar } from "@components/secure-sidebar";
+import { SecureSidebar } from "@/components/secureSidebar";
 
 export const metadata = {
   title: "Dashboard",
