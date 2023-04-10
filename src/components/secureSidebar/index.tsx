@@ -1,1 +1,1 @@
-export { default as SecureSidebar } from "./secureSidebar";
+export { default as SecureSidebar, type NavLinkType } from "./secureSidebar";

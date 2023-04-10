@@ -20,11 +20,9 @@ const withChakra = <T extends object>(Component: React.ComponentType<T>) => {
     }
 
     return (
-      <CacheProvider>
-        <ChakraProvider resetCSS>
-          <Component {...props} />
-        </ChakraProvider>
-      </CacheProvider>
+      <ChakraProvider resetCSS>
+        <Component {...props} />
+      </ChakraProvider>
     );
   };
 };

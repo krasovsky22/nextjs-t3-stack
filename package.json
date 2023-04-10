@@ -9,6 +9,7 @@
     "studio": "npx prisma studio",
     "lint": "next lint",
     "start": "next start",
+    "migrate": "prisma db push",
     "seed": "node prisma/seed.js --preview-feature --experimental-fetch"
   },
   "dependencies": {

@@ -51,15 +51,16 @@ model Session {
 }
 
 model User {
-    id            String    @id @default(auto()) @map("_id") @db.ObjectId
+    id            String       @id @default(auto()) @map("_id") @db.ObjectId
     name          String?
-    email         String?   @unique
-    emailVerified DateTime? @map("verifiedAt")
-    createdAt     DateTime  @default(now())
+    email         String?      @unique
+    emailVerified DateTime?    @map("verifiedAt")
+    createdAt     DateTime     @default(now())
     image         String?
     accounts      Account[]
     sessions      Session[]
     todos         Todo[]
+    WorkoutSet    WorkoutSet[]
 
     @@map("users")
 }
@@ -97,18 +98,50 @@ model MuscleGroup {
 }
 
 model Exercise {
-    id                    String        @id @default(auto()) @map("_id") @db.ObjectId
-    name                  String        @unique
-    type                  String
-    workoutTypes          String[]
-    force                 String
-    youtubeLink           String
-    createdAt             DateTime      @default(now())
+    id           String   @id @default(auto()) @map("_id") @db.ObjectId
+    name         String   @unique
+    type         String
+    workoutTypes String[]
+    force        String
+    youtubeLink  String
+    createdAt    DateTime @default(now())
+
     primaryMuscleGroupIds String[]      @db.ObjectId
     primaryMuscles        MuscleGroup[] @relation(name: "primary", fields: [primaryMuscleGroupIds], references: [id])
 
     secondaryMuscleGroupIds String[]      @db.ObjectId
     secondaryMuscles        MuscleGroup[] @relation(name: "secondary", fields: [secondaryMuscleGroupIds], references: [id])
 
+    WorkoutSet WorkoutSet[]
+
     @@map("exercies")
+}
+
+model WorkoutSet {
+    id String @id @default(auto()) @map("_id") @db.ObjectId
+
+    user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId String @db.ObjectId
+
+    workoutSetRepeats   WorkoutSetRepeat[]
+    
+    exercise   Exercise @relation(fields: [exerciseId], references: [id], onDelete: Cascade)
+    exerciseId String   @db.ObjectId
+
+    createdAt   DateTime @default(now())
+    workoutDate DateTime @default(now())
+
+    @@map("workout_sets")
+}
+
+model WorkoutSetRepeat {
+    id String @id @default(auto()) @map("_id") @db.ObjectId
+
+    weight  Float
+    repeats Int
+
+    workoutSet   WorkoutSet @relation(fields: [workoutSetId], references: [id], onDelete: Cascade)
+    workoutSetId String     @db.ObjectId
+
+    @@map("workout_set_repeats")
 }

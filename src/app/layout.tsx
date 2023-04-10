@@ -5,7 +5,7 @@ import "./globals.css";
 import { Navbar } from "@/components/navbar";
 
 export const metadata = {
-  title: "Gym Tracker   ",
+  title: "Gym Tracker",
   description: "Gym App",
 };
 
