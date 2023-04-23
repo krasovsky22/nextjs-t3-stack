@@ -17,6 +17,7 @@ import {
   Text,
   useDisclosure,
 } from "@chakra-ui/react";
+import { WorkoutForm } from "@components/forms/workout";
 import withChakra from "@utils/withChakra";
 import { useCallback, useState } from "react";
 import { AiOutlineDoubleLeft, AiOutlineDoubleRight } from "react-icons/ai";
@@ -82,7 +83,7 @@ const CalendarWeek = () => {
               {day}
             </Text>
             <Text fontWeight="bold">{getWeekDate(mondayDate, day)}</Text>
-            <Button colorScheme="blue" size="sm" mt={3}>
+            <Button colorScheme="blue" size="sm" mt={3} onClick={onOpen}>
               Track Workout
             </Button>
           </GridItem>
@@ -119,21 +120,24 @@ const CalendarWeek = () => {
         </GridItem>
       </Grid>
 
-      <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
+      <Modal isOpen={isOpen || true} onClose={onClose} size="4xl">
+        <ModalOverlay
+          bg="blackAlpha.300"
+          backdropFilter="blur(10px) hue-rotate(90deg)"
+        />
         <ModalContent>
           <ModalHeader>Track Workout</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <div>Modal Content Here</div>
+            <WorkoutForm date={new Date().toISOString()}/>
           </ModalBody>
 
-          <ModalFooter>
+          {/* <ModalFooter>
             <Button colorScheme="red" mr={3} onClick={onClose}>
               Close
             </Button>
             <Button colorScheme="green">Save</Button>
-          </ModalFooter>
+          </ModalFooter> */}
         </ModalContent>
       </Modal>
     </>
