@@ -1,6 +1,7 @@
 import { createTRPCRouter } from "./trpc";
 import { exampleRouter } from "./routers/example";
 import { todoRouter } from "./routers/todo";
+import { exercisesRouter } from "./routers/exercises";
 import { muscleGroupsRouter } from "./routers/muscleGroups";
 
 /**
@@ -11,6 +12,7 @@ import { muscleGroupsRouter } from "./routers/muscleGroups";
 export const appRouter = createTRPCRouter({
   todo: todoRouter,
   example: exampleRouter,
+  exercises: exercisesRouter,
   muscleGroups: muscleGroupsRouter,
 });
 

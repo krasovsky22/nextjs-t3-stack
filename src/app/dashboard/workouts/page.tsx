@@ -1,3 +1,7 @@
+"use client";
+
+import withChakra from "@utils/withChakra";
+import { api } from "@utils/api";
 import { CalendarWeek } from "@components/calendarWeek";
 
 const WorkoutPage = () => {
@@ -10,4 +14,4 @@ const WorkoutPage = () => {
   );
 };
 
-export default WorkoutPage;
+export default withChakra(api.withTRPC(WorkoutPage));

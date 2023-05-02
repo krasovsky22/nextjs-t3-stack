@@ -129,7 +129,7 @@ const CalendarWeek = () => {
           <ModalHeader>Track Workout</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <WorkoutForm date={new Date().toISOString()}/>
+            <WorkoutForm date={new Date().toISOString()} />
           </ModalBody>
 
           {/* <ModalFooter>
@@ -144,4 +144,4 @@ const CalendarWeek = () => {
   );
 };
 
-export default withChakra(CalendarWeek);
+export default CalendarWeek;

@@ -1,50 +1,37 @@
-import { useRef, useState } from "react";
+"use client";
+
 import {
+  Button,
   Flex,
+  FormControl,
   FormLabel,
   IconButton,
-  NumberInput,
-  FormControl,
-  NumberInputField,
-  NumberInputStepper,
-  NumberIncrementStepper,
-  NumberDecrementStepper,
   Input,
-  Button,
 } from "@chakra-ui/react";
+
+import Select from "react-select";
 
 import {
   Controller,
+  useFieldArray,
   useForm,
   type SubmitHandler,
-  useFieldArray,
 } from "react-hook-form";
 import { TbMinus } from "react-icons/tb";
+import { type WorkoutType } from "./types";
+import useExerciseOptions from "./hooks/useExerciseOptions";
+import Loading from "@components/loading/loading";
+import WorkoutExerciseField from "./fields/exercise";
 import withChakra from "@utils/withChakra";
-
-interface ExerciseSetType {
-  weight: number;
-  repeates: number;
-}
-
-interface ExerciseType {
-  name: string;
-  sets: ExerciseSetType[];
-}
-
-interface WorkoutType {
-  name: string;
-  date: string;
-  exercises: ExerciseType[];
-}
 
 // date comes as isostring
 const WorkoutForm: React.FC<{ date: string }> = ({ date }) => {
+  const { options, isLoading } = useExerciseOptions();
+
   const {
     control,
-    register,
     handleSubmit,
-    formState: { errors },
+    // formState: { errors },
   } = useForm<WorkoutType>({
     defaultValues: {
       name: "",
@@ -63,26 +50,6 @@ const WorkoutForm: React.FC<{ date: string }> = ({ date }) => {
     control,
     name: "exercises",
   });
-
-  //   const [exercises, setExercises] = useState<Map<number, ExerciseType>>(
-  //     new Map()
-  //   );
-
-  //   const addExercise = () => {
-  //     setExercises((prevExercises) =>
-  //       new Map(prevExercises).set(prevExercises.size, { name: "", sets: [] })
-  //     );
-  //   };
-
-  //   const removeExercise = (index: number) => {
-  //     console.log("removing", index);
-  //     setExercises((prevExercises) => {
-  //       const nextMap = new Map(prevExercises);
-
-  //       nextMap.delete(index);
-  //       return nextMap;
-  //     });
-  //   };
 
   const onSubmit: SubmitHandler<WorkoutType> = (data) => {
     console.log(JSON.stringify(data));
@@ -113,30 +80,43 @@ const WorkoutForm: React.FC<{ date: string }> = ({ date }) => {
           </FormControl>
         </Flex>
 
+        {isLoading && <Loading status="Loading exercises..." />}
+
         {exercisesFields.map((exercieField, index) => {
           return (
-            <Flex key={exercieField.id} gap={3} alignItems="center">
-              <FormControl flex={10}>
-                <FormLabel>Name</FormLabel>
-                <Controller
-                  key={index}
-                  name={`exercises.${index}.name`}
-                  control={control}
-                  render={({ field }) => {
-                    return <Input type="text" {...field} />;
-                  }}
-                />
-              </FormControl>
+            <Flex flexDir="column" gap="1" key={exercieField.id}>
+              <Flex gap={3} alignItems="center">
+                <FormControl flex={10}>
+                  <FormLabel>Name</FormLabel>
+                  <Controller
+                    key={index}
+                    name={`exercises.${index}.name`}
+                    control={control}
+                    render={({ field }) => {
+                      return (
+                        <Select
+                          {...field}
+                          options={options}
+                          noOptionsMessage={() => "No results found"}
+                        />
+                      );
+                    }}
+                  />
+                </FormControl>
 
-              <IconButton
-                mt="30px"
-                icon={<TbMinus />}
-                aria-label="Remove Exercise"
-                colorScheme="red"
-                onClick={() => removeExercise(index)}
-              >
-                Remove Exercise
-              </IconButton>
+                <IconButton
+                  mt="30px"
+                  icon={<TbMinus />}
+                  aria-label="Remove Exercise"
+                  colorScheme="red"
+                  onClick={() => removeExercise(index)}
+                >
+                  Remove Exercise
+                </IconButton>
+              </Flex>
+              <Flex>
+                <WorkoutExerciseField index={index} {...{ control }} />
+              </Flex>
             </Flex>
           );
         })}
@@ -145,7 +125,7 @@ const WorkoutForm: React.FC<{ date: string }> = ({ date }) => {
           <Button
             colorScheme="green"
             variant="solid"
-            onClick={() => addExercise({ name: "", sets: [] })}
+            onClick={() => addExercise({ name: null, sets: [] })}
           >
             Add Exercise
           </Button>
