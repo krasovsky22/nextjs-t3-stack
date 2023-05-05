@@ -1,5 +1,3 @@
-"use client";
-
 import Select from "react-select";
 import { capitalize, sortBy } from "lodash";
 import { useCallback, useMemo, useState } from "react";
@@ -10,7 +8,6 @@ import {
 } from "react-select/dist/declarations/src/types";
 
 import { api } from "@utils/api";
-import withChakra from "@utils/withChakra";
 
 type OptionType = {
   value: string;
@@ -82,4 +79,8 @@ const ExercisePage = () => {
   );
 };
 
-export default withChakra(api.withTRPC(ExercisePage));
+ExercisePage.requireAuth = true;
+ExercisePage.title = "ExercisePage";
+ExercisePage.description = "Exercise Page Description";
+
+export default ExercisePage;

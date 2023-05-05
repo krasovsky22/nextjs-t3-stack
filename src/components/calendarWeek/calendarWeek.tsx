@@ -1,5 +1,3 @@
-"use client";
-
 import {
   Box,
   Button,
@@ -18,7 +16,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { WorkoutForm } from "@components/forms/workout";
-import withChakra from "@utils/withChakra";
+
 import { useCallback, useState } from "react";
 import { AiOutlineDoubleLeft, AiOutlineDoubleRight } from "react-icons/ai";
 import { DAYS, getFirstDayOfWeek, getWeekDate } from "./utils";
@@ -120,7 +118,7 @@ const CalendarWeek = () => {
         </GridItem>
       </Grid>
 
-      <Modal isOpen={isOpen || true} onClose={onClose} size="4xl">
+      <Modal isOpen={isOpen} onClose={onClose} size="4xl">
         <ModalOverlay
           bg="blackAlpha.300"
           backdropFilter="blur(10px) hue-rotate(90deg)"

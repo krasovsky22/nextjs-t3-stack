@@ -1,5 +1,3 @@
-"use client";
-
 import { capitalize } from "lodash";
 import {
   Box,
@@ -14,7 +12,7 @@ import { useEffect, useRef, useState } from "react";
 import BackBody from "./back";
 import FrontBody from "./front";
 import styles from "./humanbody.module.css";
-import withChakra from "@utils/withChakra";
+
 const bodyPartClass = styles["body-map__muscle"] as string;
 
 const HumanBody = ({ isBack = false }: { isBack?: boolean }) => {
@@ -158,4 +156,4 @@ const HumanBody = ({ isBack = false }: { isBack?: boolean }) => {
   );
 };
 
-export default withChakra(HumanBody);
+export default HumanBody;

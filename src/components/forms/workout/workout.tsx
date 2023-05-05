@@ -1,5 +1,3 @@
-"use client";
-
 import {
   Button,
   Flex,
@@ -22,7 +20,6 @@ import { type WorkoutType } from "./types";
 import useExerciseOptions from "./hooks/useExerciseOptions";
 import Loading from "@components/loading/loading";
 import WorkoutExerciseField from "./fields/exercise";
-import withChakra from "@utils/withChakra";
 
 // date comes as isostring
 const WorkoutForm: React.FC<{ date: string }> = ({ date }) => {
@@ -138,4 +135,4 @@ const WorkoutForm: React.FC<{ date: string }> = ({ date }) => {
   );
 };
 
-export default withChakra(WorkoutForm);
+export default WorkoutForm;

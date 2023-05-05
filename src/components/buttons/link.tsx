@@ -1,9 +1,6 @@
-"use client";
-
 import { type ReactNode } from "react";
 import { IconButton, type IconButtonProps } from "@chakra-ui/react";
 import Link from "next/link";
-import withChakra from "@utils/withChakra";
 
 interface LinkButtonProps extends IconButtonProps {
   children: ReactNode;
@@ -21,4 +18,4 @@ const LinkButton: React.FC<LinkButtonProps> = ({
   );
 };
 
-export default withChakra(LinkButton);
+export default LinkButton;

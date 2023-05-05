@@ -1,7 +1,4 @@
-"use client";
-
 import { api } from "@utils/api";
-import withChakra from "@utils/withChakra";
 
 import { useState } from "react";
 import {
@@ -67,4 +64,8 @@ const TodoPage = () => {
   );
 };
 
-export default withChakra(api.withTRPC(TodoPage));
+TodoPage.requireAuth = true;
+TodoPage.title = "TodoPage";
+TodoPage.description = "Todo Page Description";
+
+export default TodoPage;
