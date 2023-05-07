@@ -1,9 +1,9 @@
 import { GithubButton, LinkButton, LogoutButton } from "@components/buttons";
-import getSession from "@utils/getSession";
+import { useSession } from "next-auth/react";
 import { AiFillHome } from "react-icons/ai";
 
-async function Navbar() {
-  const session = await getSession();
+function Navbar() {
+  const { data: session } = useSession();
 
   return (
     <header className="absolute flex h-14 w-full items-center justify-around border-b border-gray-200 p-2 text-2xl">
@@ -19,9 +19,9 @@ async function Navbar() {
         )}
       </div>
       <div className="mx-5">
-        {session && <LogoutButton session={session} />}
+        {session?.user && <LogoutButton />}
 
-        {!session && <GithubButton />}
+        {!session?.user && <GithubButton />}
       </div>
     </header>
   );
