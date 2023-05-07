@@ -1,9 +1,9 @@
 import { z } from "zod";
 
 const WorkoutSet = z.object({
-  weight: z.string(),
+  weight: z.number().multipleOf(0.1),
   weightType: z.enum(["lb", "kg"]),
-  repeats: z.string(),
+  repeats: z.number(),
 });
 
 const WorkoutExercise = z.object({

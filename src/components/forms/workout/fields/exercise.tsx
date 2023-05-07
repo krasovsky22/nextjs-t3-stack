@@ -39,7 +39,7 @@ const WorkoutExerciseField: React.FC<WorkoutExerciseFieldType> = ({
         <Button
           colorScheme="green"
           variant="solid"
-          onClick={() => addSet({ weightType: "kg", weight: "", repeats: "" })}
+          onClick={() => addSet({ weightType: "kg", weight: 0, repeats: 0 })}
         >
           Add Set
         </Button>
@@ -58,7 +58,12 @@ const WorkoutExerciseField: React.FC<WorkoutExerciseFieldType> = ({
                     render={({ field }) => {
                       return (
                         <NumberInput size="sm" min={0} step={1} max={100}>
-                          <NumberInputField {...field} />
+                          <NumberInputField
+                            {...field}
+                            onChange={(event) =>
+                              field.onChange(+event.target.value)
+                            }
+                          />
                           <NumberInputStepper>
                             <NumberIncrementStepper
                               onClick={() =>
@@ -103,7 +108,12 @@ const WorkoutExerciseField: React.FC<WorkoutExerciseFieldType> = ({
                     render={({ field }) => {
                       return (
                         <NumberInput min={0} step={1} max={100} size="sm">
-                          <NumberInputField {...field} />
+                          <NumberInputField
+                            {...field}
+                            onChange={(event) =>
+                              field.onChange(+event.target.value)
+                            }
+                          />
                           <NumberInputStepper>
                             <NumberIncrementStepper
                               onClick={() =>
