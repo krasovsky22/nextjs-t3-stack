@@ -1,24 +1,23 @@
 import {
   Box,
-  Button,
+  Text,
   Flex,
   Grid,
-  GridItem,
-  IconButton,
   Modal,
+  Button,
+  GridItem,
   ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
+  IconButton,
   ModalHeader,
   ModalOverlay,
-  Text,
+  ModalContent,
   useDisclosure,
+  ModalCloseButton,
 } from "@chakra-ui/react";
 import { WorkoutForm } from "@components/forms/workout";
-
 import { useCallback, useState } from "react";
 import { AiOutlineDoubleLeft, AiOutlineDoubleRight } from "react-icons/ai";
+
 import { DAYS, getFirstDayOfWeek, getWeekDate } from "./utils";
 
 const CalendarWeek = () => {

@@ -1,23 +1,23 @@
 import {
   Flex,
   Select,
-  FormControl,
+  Button,
   FormLabel,
   IconButton,
   NumberInput,
+  FormControl,
   NumberInputField,
   NumberInputStepper,
   NumberIncrementStepper,
   NumberDecrementStepper,
-  Button,
 } from "@chakra-ui/react";
-import { Controller, useFieldArray, type Control } from "react-hook-form";
 import { TbMinus } from "react-icons/tb";
-import { type WorkoutType } from "../types";
+import { type CreateWorkoutInputType } from "@models/workout";
+import { Controller, useFieldArray, type Control } from "react-hook-form";
 
-interface WorkoutExerciseFieldType{
+interface WorkoutExerciseFieldType {
   index: number;
-  control: Control<WorkoutType>;
+  control: Control<CreateWorkoutInputType>;
 }
 
 const WorkoutExerciseField: React.FC<WorkoutExerciseFieldType> = ({
@@ -30,31 +30,34 @@ const WorkoutExerciseField: React.FC<WorkoutExerciseFieldType> = ({
     remove: removeSet,
   } = useFieldArray({
     control,
-    name: `exercises.${index}.sets`,
+    name: `workoutExercises.${index}.workoutSets`,
   });
 
   return (
     <>
+      {setsFields.length === 0 && (
+        <Button
+          colorScheme="green"
+          variant="solid"
+          onClick={() => addSet({ weightType: "kg", weight: "", repeats: "" })}
+        >
+          Add Set
+        </Button>
+      )}
       <Flex flexDir="column" gap={1} width="100%">
-        {setsFields.map((setField, indexIndex) => {
+        {setsFields.map((setField, setIndex) => {
           return (
             <Flex key={setField.id} width="100%" justifyContent="space-between">
               <Flex gap={3} alignItems="center" justifyContent="space-evenly">
                 <FormControl flex={10}>
-                  {indexIndex === 0 && <FormLabel>Weight</FormLabel>}
+                  {setIndex === 0 && <FormLabel>Weight</FormLabel>}
                   <Controller
                     key={index}
-                    name={`exercises.${index}.sets.${indexIndex}.weight`}
+                    name={`workoutExercises.${index}.workoutSets.${setIndex}.weight`}
                     control={control}
                     render={({ field }) => {
                       return (
-                        <NumberInput
-                          size="sm"
-                          min={0}
-                          step={1}
-                          max={100}
-                          defaultValue={field.value}
-                        >
+                        <NumberInput size="sm" min={0} step={1} max={100}>
                           <NumberInputField {...field} />
                           <NumberInputStepper>
                             <NumberIncrementStepper
@@ -75,10 +78,10 @@ const WorkoutExerciseField: React.FC<WorkoutExerciseFieldType> = ({
                 </FormControl>
 
                 <FormControl flex={10}>
-                  {indexIndex === 0 && <FormLabel>Type</FormLabel>}
+                  {setIndex === 0 && <FormLabel>Type</FormLabel>}
                   <Controller
                     key={index}
-                    name={`exercises.${index}.sets.${indexIndex}.weightType`}
+                    name={`workoutExercises.${index}.workoutSets.${setIndex}.weightType`}
                     control={control}
                     render={({ field }) => {
                       return (
@@ -92,20 +95,14 @@ const WorkoutExerciseField: React.FC<WorkoutExerciseFieldType> = ({
                 </FormControl>
 
                 <FormControl flex={10}>
-                  {indexIndex === 0 && <FormLabel>Repeates</FormLabel>}
+                  {setIndex === 0 && <FormLabel>Repeats</FormLabel>}
                   <Controller
                     key={index}
-                    name={`exercises.${index}.sets.${indexIndex}.repeates`}
+                    name={`workoutExercises.${index}.workoutSets.${setIndex}.repeats`}
                     control={control}
                     render={({ field }) => {
                       return (
-                        <NumberInput
-                          min={0}
-                          step={1}
-                          max={100}
-                          size="sm"
-                          defaultValue={field.value}
-                        >
+                        <NumberInput min={0} step={1} max={100} size="sm">
                           <NumberInputField {...field} />
                           <NumberInputStepper>
                             <NumberIncrementStepper
@@ -124,40 +121,32 @@ const WorkoutExerciseField: React.FC<WorkoutExerciseFieldType> = ({
                     }}
                   />
                 </FormControl>
-                <IconButton
-                  alignSelf="flex-end"
-                  icon={<TbMinus />}
-                  aria-label="Remove Set"
-                  colorScheme="red"
-                  onClick={() => removeSet(indexIndex)}
-                >
-                  Remove Exercise
-                </IconButton>
+                {setIndex === setsFields.length - 1 && (
+                  <Button
+                    size="sm"
+                    alignSelf="end"
+                    colorScheme="yellow"
+                    onClick={() =>
+                      addSet({ weightType: "kg", weight: 0, repeats: 0 })
+                    }
+                  >
+                    Add Set
+                  </Button>
+                )}
               </Flex>
 
-              {indexIndex === setsFields.length - 1 && (
-                <Button
-                    alignSelf="end"
-                  colorScheme="green"
-                  variant="solid"
-                  onClick={() => addSet({ weightType: "kg" })}
-                >
-                  Add Set
-                </Button>
-              )}
+              <IconButton
+                size="sm"
+                alignSelf="flex-end"
+                icon={<TbMinus />}
+                aria-label="Remove Set"
+                colorScheme="red"
+                onClick={() => removeSet(setIndex)}
+              />
             </Flex>
           );
         })}
       </Flex>
-      {setsFields.length === 0 && (
-        <Button
-          colorScheme="green"
-          variant="solid"
-          onClick={() => addSet({ weightType: "kg" })}
-        >
-          Add Set
-        </Button>
-      )}
     </>
   );
 };

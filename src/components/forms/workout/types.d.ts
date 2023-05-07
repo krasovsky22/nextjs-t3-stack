@@ -4,17 +4,17 @@ export interface OptionType {
 }
 export interface ExerciseSetType {
   weight?: number;
-  repeates?: number;
+  repeats?: number;
   weightType: "kg" | "lb";
 }
 
-export interface ExerciseType {
-  name: OptionType | null;
-  sets: ExerciseSetType[];
+export interface WorkoutExerciseType {
+  exercise: OptionType | null;
+  workoutSets: ExerciseSetType[];
 }
 
 export interface WorkoutType {
   name: string;
-  date: string;
-  exercises: ExerciseType[];
+  workoutDate: string;
+  workoutExercises: WorkoutExerciseType[];
 }

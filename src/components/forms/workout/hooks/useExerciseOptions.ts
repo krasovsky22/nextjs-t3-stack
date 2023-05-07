@@ -7,11 +7,12 @@ let exercisesOptionsCache: OptionType[] = [];
 const useExerciseOptions = () => {
   const { data: exercises, isLoading } = api.exercises.findAll.useQuery(
     undefined,
-    { enabled: exercisesOptionsCache.length === 0 }
+    {
+      enabled: exercisesOptionsCache.length === 0,
+    }
   );
 
   useEffect(() => {
-    console.log("use Effect");
     const options =
       exercises?.map((exercise) => ({
         label: exercise.name,
@@ -25,7 +26,7 @@ const useExerciseOptions = () => {
 
   return {
     options: exercisesOptionsCache,
-    isLoading,
+    isLoading: isLoading && exercisesOptionsCache.length === 0,
   };
 };
 

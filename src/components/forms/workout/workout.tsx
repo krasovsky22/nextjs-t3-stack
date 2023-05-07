@@ -1,10 +1,10 @@
 import {
-  Button,
+  Input,
   Flex,
-  FormControl,
+  Button,
   FormLabel,
   IconButton,
-  Input,
+  FormControl,
 } from "@chakra-ui/react";
 
 import Select from "react-select";
@@ -15,11 +15,20 @@ import {
   useForm,
   type SubmitHandler,
 } from "react-hook-form";
+
 import { TbMinus } from "react-icons/tb";
-import { type WorkoutType } from "./types";
-import useExerciseOptions from "./hooks/useExerciseOptions";
-import Loading from "@components/loading/loading";
+import { BsPlusCircle } from "react-icons/bs";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+import { api } from "@utils/api";
+// import { type WorkoutType } from "./types";
+import { Loading } from "@components/loading";
 import WorkoutExerciseField from "./fields/exercise";
+import useExerciseOptions from "./hooks/useExerciseOptions";
+import {
+  CreateWorkoutInput,
+  type CreateWorkoutInputType,
+} from "@models/workout";
 
 // date comes as isostring
 const WorkoutForm: React.FC<{ date: string }> = ({ date }) => {
@@ -28,15 +37,16 @@ const WorkoutForm: React.FC<{ date: string }> = ({ date }) => {
   const {
     control,
     handleSubmit,
-    // formState: { errors },
-  } = useForm<WorkoutType>({
+    formState: { errors },
+  } = useForm<CreateWorkoutInputType>({
     defaultValues: {
       name: "",
 
       // make it yyyy-mm-dd
-      date: date.split("T")[0],
-      exercises: [],
+      workoutDate: date.split("T")[0],
+      workoutExercises: [],
     },
+    resolver: zodResolver(CreateWorkoutInput),
   });
 
   const {
@@ -45,12 +55,21 @@ const WorkoutForm: React.FC<{ date: string }> = ({ date }) => {
     remove: removeExercise,
   } = useFieldArray({
     control,
-    name: "exercises",
+    name: "workoutExercises",
   });
 
-  const onSubmit: SubmitHandler<WorkoutType> = (data) => {
-    console.log(JSON.stringify(data));
+  const createWorkoutExerciseMutation =
+    api.workouts.createWorkoutExercise.useMutation();
+
+  const onSubmit: SubmitHandler<CreateWorkoutInputType> = (workoutFormData) => {
+    // const { name, workoutDate, workoutExercises } = workoutFormData;
+
+    console.log("form submit", workoutFormData);
+
+    createWorkoutExerciseMutation.mutate({ ...workoutFormData });
   };
+
+  console.log("error", errors);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -61,14 +80,22 @@ const WorkoutForm: React.FC<{ date: string }> = ({ date }) => {
             <Controller
               name="name"
               control={control}
-              render={({ field }) => <Input {...field} />}
+              render={({ field }) => {
+                return (
+                  <Input
+                    {...field}
+                    isInvalid={!!errors.name?.message}
+                    placeholder={errors.name?.message}
+                  />
+                );
+              }}
             />
           </FormControl>
 
           <FormControl flex={1}>
             <FormLabel>Date</FormLabel>
             <Controller
-              name="date"
+              name="workoutDate"
               control={control}
               render={({ field }) => {
                 return <Input type="date" {...field} />;
@@ -84,15 +111,18 @@ const WorkoutForm: React.FC<{ date: string }> = ({ date }) => {
             <Flex flexDir="column" gap="1" key={exercieField.id}>
               <Flex gap={3} alignItems="center">
                 <FormControl flex={10}>
-                  <FormLabel>Name</FormLabel>
+                  <FormLabel>{`Exercise ${index + 1}`}</FormLabel>
                   <Controller
                     key={index}
-                    name={`exercises.${index}.name`}
+                    name={`workoutExercises.${index}.exerciseId`}
                     control={control}
+                    rules={{ required: "Please select a Exercise" }}
                     render={({ field }) => {
                       return (
                         <Select
-                          {...field}
+                          onChange={(selectedOption) =>
+                            field.onChange(selectedOption?.value ?? "")
+                          }
                           options={options}
                           noOptionsMessage={() => "No results found"}
                         />
@@ -103,9 +133,10 @@ const WorkoutForm: React.FC<{ date: string }> = ({ date }) => {
 
                 <IconButton
                   mt="30px"
+                  size="sm"
                   icon={<TbMinus />}
                   aria-label="Remove Exercise"
-                  colorScheme="red"
+                  colorScheme="orange"
                   onClick={() => removeExercise(index)}
                 >
                   Remove Exercise
@@ -120,9 +151,10 @@ const WorkoutForm: React.FC<{ date: string }> = ({ date }) => {
 
         <Flex justifyContent="space-between">
           <Button
+            leftIcon={<BsPlusCircle />}
             colorScheme="green"
             variant="solid"
-            onClick={() => addExercise({ name: null, sets: [] })}
+            onClick={() => addExercise({ exerciseId: "", workoutSets: [] })}
           >
             Add Exercise
           </Button>
