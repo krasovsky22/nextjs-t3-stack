@@ -46,10 +46,13 @@ const CalendarWeek = () => {
     setMondayDate(weekAgoDate);
   }, [mondayDate]);
 
-  const onTrackWorkoutClick = useCallback((workoutDate: Date) => {
-    setSelectedWorkoutDate(workoutDate);
-    onOpen();
-  }, []);
+  const onTrackWorkoutClick = useCallback(
+    (workoutDate: Date) => {
+      setSelectedWorkoutDate(workoutDate);
+      onOpen();
+    },
+    [onOpen]
+  );
 
   return (
     <>
