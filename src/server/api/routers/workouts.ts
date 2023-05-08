@@ -1,3 +1,5 @@
+import { z } from "zod";
+
 import { CreateWorkoutInput } from "@models/workout";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
@@ -5,14 +7,13 @@ export const workoutsRouter = createTRPCRouter({
   createWorkoutExercise: protectedProcedure
     .input(CreateWorkoutInput)
     .mutation(async ({ input, ctx }) => {
-    const userId = ctx.session.user.id;
-    const { name, workoutDate, workoutExercises } = input;
-
+      const userId = ctx.session.user.id;
+      const { name, workoutDate, workoutExercises } = input;
 
       const tObject = {
         data: {
           name,
-          workoutDate: new Date(workoutDate),
+          workoutDate: new Date(workoutDate).toISOString(),
           user: {
             connect: { id: userId },
           },
@@ -48,9 +49,35 @@ export const workoutsRouter = createTRPCRouter({
       const workout = await ctx.prisma.workout.create(tObject);
 
       return workout;
-    
     }),
-  findAll: protectedProcedure.query(({ ctx }) => {
-    return ctx.prisma.exercise.findMany();
-  }),
+  findWorkoutsWithinDates: protectedProcedure
+    .input(
+      z.object({
+        startDate: z.string().nonempty(),
+        endDate: z.string().nonempty(),
+      })
+    )
+    .query(async ({ input, ctx }) => {
+      const { startDate, endDate } = input;
+      const workouts = await ctx.prisma.workout.findMany({
+        where: {
+          workoutDate: {
+            gte: startDate,
+            lte: endDate,
+          },
+        },
+        include: {
+          workoutExercises: {
+            include: {
+              workoutExerciseSets: true,
+            },
+          },
+        },
+      });
+
+      return workouts.map((workout) => ({
+        ...workout,
+        workoutDate: new Date(workout.workoutDate).toISOString(),
+      }));
+    }),
 });

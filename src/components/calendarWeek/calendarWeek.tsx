@@ -14,14 +14,16 @@ import {
   useDisclosure,
   ModalCloseButton,
 } from "@chakra-ui/react";
+import { api } from "@utils/api";
 import { WorkoutForm } from "@components/forms/workout";
 import { useCallback, useState } from "react";
 import { AiOutlineDoubleLeft, AiOutlineDoubleRight } from "react-icons/ai";
 
 import {
   DAYS,
-  getFirstDayOfWeek,
   getWeekDate,
+  getLastDayOfWeek,
+  getFirstDayOfWeek,
   getCalendarDayFormat,
 } from "./utils";
 
@@ -31,6 +33,13 @@ const CalendarWeek = () => {
   const [selectedWorkoutDate, setSelectedWorkoutDate] = useState<Date | null>(
     null
   );
+
+  const { data: workouts } = api.workouts.findWorkoutsWithinDates.useQuery({
+    startDate: mondayDate.toISOString(),
+    endDate: getLastDayOfWeek(mondayDate).toISOString(),
+  });
+
+  console.log("aaaa", workouts);
 
   const onPrevWeekClicked = useCallback(() => {
     const copy = new Date(mondayDate.toISOString());
