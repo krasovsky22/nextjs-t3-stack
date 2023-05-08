@@ -18,11 +18,19 @@ import { WorkoutForm } from "@components/forms/workout";
 import { useCallback, useState } from "react";
 import { AiOutlineDoubleLeft, AiOutlineDoubleRight } from "react-icons/ai";
 
-import { DAYS, getFirstDayOfWeek, getWeekDate } from "./utils";
+import {
+  DAYS,
+  getFirstDayOfWeek,
+  getWeekDate,
+  getCalendarDayFormat,
+} from "./utils";
 
 const CalendarWeek = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [mondayDate, setMondayDate] = useState(getFirstDayOfWeek());
+  const [selectedWorkoutDate, setSelectedWorkoutDate] = useState<Date | null>(
+    null
+  );
 
   const onPrevWeekClicked = useCallback(() => {
     const copy = new Date(mondayDate.toISOString());
@@ -37,6 +45,11 @@ const CalendarWeek = () => {
     const weekAgoDate = new Date(copy.setDate(copy.getDate() + 7));
     setMondayDate(weekAgoDate);
   }, [mondayDate]);
+
+  const onTrackWorkoutClick = useCallback((workoutDate: Date) => {
+    setSelectedWorkoutDate(workoutDate);
+    onOpen();
+  }, []);
 
   return (
     <>
@@ -65,26 +78,34 @@ const CalendarWeek = () => {
         </Box>
       </Flex>
       <Grid templateColumns="repeat(7, 1fr)" gap={2} flex={1}>
-        {DAYS.map((day) => (
-          <GridItem
-            key={day}
-            w="100%"
-            bg="pink"
-            as={Flex}
-            flexDir="column"
-            alignItems="center"
-            justifyContent="center"
-            py={3}
-          >
-            <Text fontSize="xx-large" color="gray.500">
-              {day}
-            </Text>
-            <Text fontWeight="bold">{getWeekDate(mondayDate, day)}</Text>
-            <Button colorScheme="blue" size="sm" mt={3} onClick={onOpen}>
-              Track Workout
-            </Button>
-          </GridItem>
-        ))}
+        {DAYS.map((day) => {
+          const dayDate = getWeekDate(mondayDate, day);
+          return (
+            <GridItem
+              key={day}
+              w="100%"
+              bg="pink"
+              as={Flex}
+              flexDir="column"
+              alignItems="center"
+              justifyContent="center"
+              py={3}
+            >
+              <Text fontSize="xx-large" color="gray.500">
+                {day}
+              </Text>
+              <Text fontWeight="bold">{dayDate.getDate()}</Text>
+              <Button
+                colorScheme="blue"
+                size="sm"
+                mt={3}
+                onClick={() => onTrackWorkoutClick(dayDate)}
+              >
+                Track Workout
+              </Button>
+            </GridItem>
+          );
+        })}
       </Grid>
 
       <Grid
@@ -117,26 +138,23 @@ const CalendarWeek = () => {
         </GridItem>
       </Grid>
 
-      <Modal isOpen={isOpen} onClose={onClose} size="4xl">
-        <ModalOverlay
-          bg="blackAlpha.300"
-          backdropFilter="blur(10px) hue-rotate(90deg)"
-        />
-        <ModalContent>
-          <ModalHeader>Track Workout</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <WorkoutForm date={new Date().toISOString()} />
-          </ModalBody>
-
-          {/* <ModalFooter>
-            <Button colorScheme="red" mr={3} onClick={onClose}>
-              Close
-            </Button>
-            <Button colorScheme="green">Save</Button>
-          </ModalFooter> */}
-        </ModalContent>
-      </Modal>
+      {selectedWorkoutDate && (
+        <Modal isOpen={isOpen} onClose={onClose} size="4xl">
+          <ModalOverlay
+            bg="blackAlpha.300"
+            backdropFilter="blur(10px) hue-rotate(90deg)"
+          />
+          <ModalContent>
+            <ModalHeader>
+              {selectedWorkoutDate.toLocaleDateString()} workout
+            </ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>
+              <WorkoutForm date={getCalendarDayFormat(selectedWorkoutDate)} />
+            </ModalBody>
+          </ModalContent>
+        </Modal>
+      )}
     </>
   );
 };

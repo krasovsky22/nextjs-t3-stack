@@ -8,7 +8,7 @@ export const workoutsRouter = createTRPCRouter({
     const userId = ctx.session.user.id;
     const { name, workoutDate, workoutExercises } = input;
 
-    try {
+
       const tObject = {
         data: {
           name,
@@ -44,16 +44,11 @@ export const workoutsRouter = createTRPCRouter({
           },
         },
       };
-      console.log(JSON.stringify(tObject));
+
       const workout = await ctx.prisma.workout.create(tObject);
 
-      return { success: true, data: workout };
-    } catch (e) {
-      console.log("ERROR", e);
-      return { success: false, message: e };
-    }
-
-    return { success: true, data: [] };
+      return workout;
+    
     }),
   findAll: protectedProcedure.query(({ ctx }) => {
     return ctx.prisma.exercise.findMany();

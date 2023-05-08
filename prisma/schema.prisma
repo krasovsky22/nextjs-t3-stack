@@ -124,7 +124,7 @@ model Workout {
     name String
 
     createdAt   DateTime @default(now())
-    workoutDate DateTime @default(now())
+    workoutDate DateTime @default(now()) @unique
 
     user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
     userId String @db.ObjectId

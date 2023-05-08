@@ -21,7 +21,6 @@ import { BsPlusCircle } from "react-icons/bs";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { api } from "@utils/api";
-// import { type WorkoutType } from "./types";
 import { Loading } from "@components/loading";
 import WorkoutExerciseField from "./fields/exercise";
 import useExerciseOptions from "./hooks/useExerciseOptions";
@@ -30,9 +29,10 @@ import {
   type CreateWorkoutInputType,
 } from "@models/workout";
 
-// date comes as isostring
+// date comes as yyyy-mm-dd
 const WorkoutForm: React.FC<{ date: string }> = ({ date }) => {
   const { options, isLoading } = useExerciseOptions();
+  console.log(date);
 
   const {
     control,
@@ -42,8 +42,7 @@ const WorkoutForm: React.FC<{ date: string }> = ({ date }) => {
     defaultValues: {
       name: "",
 
-      // make it yyyy-mm-dd
-      workoutDate: date.split("T")[0],
+      workoutDate: date,
       workoutExercises: [],
     },
     resolver: zodResolver(CreateWorkoutInput),

@@ -27,5 +27,13 @@ export function getWeekDate(mondayDate: Date, dayString: WeekDayType) {
   const tDate = new Date(mondayDate);
   tDate.setDate(tDate.getDate() + key + 1);
 
-  return tDate.getDate();
+  return tDate;
+}
+
+export function getCalendarDayFormat(date: Date = new Date()): string {
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  const year = date.getFullYear();
+
+  return `${year}-${month}-${day}`;
 }
